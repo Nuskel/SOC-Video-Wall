@@ -1,0 +1,103 @@
+<div class="control-header">
+  <div>
+    <label> Einzelauswahl </label>
+    <mat-slide-toggle class="mode-selector" [(ngModel)]="control.selectionMode"></mat-slide-toggle>
+    <label> Mehrfachauswahl </label>
+
+    <div style="float: right">
+      <button *ngIf="control.selectionMode" class="z-button" (click)="selectAll()"> <i class="bi bi-check2-square"></i> Alle </button>
+      <button *ngIf="control.selectionMode" class="z-button" (click)="selectNone()"> <i class="bi bi-app"></i> Keine </button>
+    </div>
+  </div>
+
+  <div class="control-mode-container">
+    <div *ngIf="!selectionMode">
+      <div class="info">
+        <div class="info-icon">
+          <i class="bi bi-info-circle"></i>
+        </div>
+        <div class="info-content">
+          <p> Im Einzelmodus lassen sich die Monitore individuell anpassen. </p>
+          <p> Wenn ein Monitor ausgeschaltet ist, können keine Einstellungen vorgenommen werden. </p>
+          <p> Nach einer Änderung kann es kurz dauern, bis der Befehl verarbeitet wurde. </p>
+          <p> </p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectionMode">
+      <div class="info">
+        <div class="info-icon">
+          <i class="bi bi-info-circle"></i>
+        </div>
+        <div class="info-content">
+          <p> Wählen Sie mehrere Monitore aus, damit eine Aktion auf alle ausgewählten angewendet werden kann. </p>
+          <p> Dazu muss einfach nur der entsprechende Monitor angeklickt werden. </p>
+        </div>
+      </div>
+
+      <div class="control">
+        <label> <i class="bi bi-pc-display-horizontal"></i> </label>
+        <select class="spec-select"
+                matTooltip="Desktop"
+                matTooltipPosition="above" (change)="changes = true">
+          <option> SOC 01 </option>
+          <option> SOC 02 </option>
+        </select>
+
+        <button class="x-button"
+                matTooltip="Mich als Quell-PC setzen"
+                matTooltipPosition="above"> <i class="bi bi-person-circle"></i> </button>
+      </div>
+
+      <div class="control" title="Quelle">
+        <label> <i class="bi bi-hdmi"></i> </label>
+        <select class="spec-select"
+                matTooltip="Quelle"
+                matTooltipPosition="above" (change)="changes = true">
+          <option> HDMI 1 </option>
+          <option> HDMI 2 </option>
+          <option> Display Port 1 </option>
+        </select>
+      </div>
+
+      <!-- TODO: Changes sind auch, wenn ein Feld aus/abgewählt wird !! -->
+
+      <div class="control">
+        <button class="y-button"
+                matTooltipPosition="above"
+                [matTooltip]="changes ? 'Änderungen übernehmen' : ''"
+                [disabled]="!changes"
+                (click)="applyChanges()"> <i class="bi bi-caret-right-fill"></i> Ausführen </button>
+      </div>
+
+      <!-- Directy executed: -->
+
+      <div class="control control-right">
+        <button class="sub-control x-button rotate"
+                matTooltip="Videowand-Modus einschalten"
+                matTooltipPosition="above" (click)="toggleVideoWallOn()">
+          <i class="bi bi-grid-1x2"></i>
+        </button>
+        <button class="sub-control x-button"
+                matTooltip="Videowand-Modus ausschalten"
+                matTooltipPosition="above" (click)="toggleVideoWallOff()">
+          <i class="bi bi-grid"></i>
+        </button>
+      </div>
+
+      <div class="control control-right">
+        <button class="sub-control x-button monitor-power-toggle power-on"
+                matTooltip="Einschalten"
+                matTooltipPosition="above" (click)="toggleOn()">
+          <i class="bi bi-power"></i>
+        </button>
+        <button class="sub-control x-button monitor-power-toggle power-off"
+                matTooltip="Ausschalten"
+                matTooltipPosition="above" (click)="toggleOff()">
+          <i class="bi bi-power"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

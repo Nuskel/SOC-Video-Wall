@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+$background-color: #212F3C;
+$header-color:  #17202a;
+
+$color-on: #2ecc71;
+$color-off: #e74c3c;
+$color-pending: #bdc3c7;
+
+$color-slider-bar: #1b2631;
+
+$monitor-height: 180px;
+
+// https://htmlcolorcodes.com/color-chart/
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+html, body { margin: 0; height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.rotate-z-90deg {
+  transform: rotateZ(90deg);
+}

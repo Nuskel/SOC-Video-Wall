@@ -1,0 +1,60 @@
+<div [ngClass]="['monitor', borderClass]">
+  <div class="monitor-content-wrapper"></div>
+
+  <div *ngIf="selectionMode" class="monitor-content-wrapper multiselect-wrapper" (click)="selected = !selected">
+    <div [ngClass]="{'multiselect-control': true, 'multiselect-selected': selected}">
+      <p> {{ monitor.name }} </p>
+      <p> <i class="multiselect-tick bi bi-check-lg"></i> </p>
+      <p class="faded">
+        {{ monitor.source }} •
+        {{ monitor.desktop }} •
+
+        <!-- Video-Wall mode -->
+        <i *ngIf="monitor.videowall" class="videowall bi bi-grid-1x2"></i>
+        <i *ngIf="!monitor.videowall" class="bi bi-grid"></i>
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="isPending" class="monitor-content-wrapper loading-wrapper">
+    <mat-spinner class="loading-spinner" [diameter]="20"></mat-spinner>
+  </div>
+
+  <div class="monitor-content">
+    <div class="monitor-header">
+      <span class="monitor-name"> {{ monitor.name }} </span>
+
+      <i *ngIf="power === 'on'" class="bi bi-display-fill" title="Der Monitor ist an"></i>
+      <i *ngIf="power === 'off'" class="bi bi-display" title="Der Monitor ist aus"></i>
+      <i *ngIf="power === 'pending'" class="bi bi-cast" title="Der Monitor verarbeitet einen Befehl"></i>
+
+      <i *ngIf="monitor.desktop === control.me.name" class="monitor-me bi bi-person" title="Ich bin der Quell-Desktop"></i>
+
+      <button class="monitor-power-toggle spec-button" [title]="powerToggleTitle" (click)="togglePower()"> <i class="bi bi-power"></i> </button>
+    </div>
+
+    <div class="monitor-spec" title="Eingangs-PC">
+      <label> <i class="bi bi-pc-display-horizontal"></i> </label>
+      <select class="spec-select" [disabled]="controlDisabled">
+        <option> SOC 01 </option>
+        <option> SOC 02 </option>
+      </select>
+      <button class="spec-button spec-button-large" title="Mich als Eingang setzen" [disabled]="controlDisabled"> <i class="bi bi-person-circle"></i> </button>
+    </div>
+
+    <div class="monitor-spec" title="Quelle">
+      <label> <i class="bi bi-hdmi"></i> </label>
+      <select class="spec-select" [disabled]="controlDisabled">
+        <option> HDMI 1 </option>
+        <option> HDMI 2 </option>
+        <option> Display Port 1 </option>
+      </select>
+    </div>
+
+    <div class="monitor-spec">
+      <label> <i class="videowall bi bi-grid-1x2"></i> </label>
+      <mat-slide-toggle [disabled]="controlDisabled" (change)="mockPending()"></mat-slide-toggle>
+      <span style="margin-left: 5px"> Videowand </span>
+    </div>
+  </div>
+</div>

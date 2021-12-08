@@ -1,0 +1,304 @@
+@import "src/styles";
+
+.monitor {
+  border: 2px solid;
+  border-radius: 25px;
+  display: block;
+  height: $monitor-height;
+  position: relative;
+  transition: border-color 0.2s;
+  width: 300px;
+}
+
+.monitor-content-wrapper {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+//
+
+.loading-wrapper {
+  background-color: $background-color;
+  border-radius: 25px;
+  cursor: progress;
+  opacity: 0.6;
+  z-index: 100;
+}
+
+.loading-spinner {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.multiselect-wrapper {
+  align-items: center;
+  background-color: $header-color;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  opacity: 1;
+  transition: background-color 0.2s;
+  z-index: 100;
+
+  &:hover {
+    background-color: lighten($header-color, 2);
+  }
+}
+
+.multiselect-control {
+  text-align: center;
+  width: 100%;
+
+  & p {
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.multiselect-tick {
+  color: $color-on;
+  font-size: 60px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.multiselect-selected {
+  & i {
+    opacity: 1;
+  }
+}
+
+.faded {
+  color: #566573;
+}
+
+.videowall {
+  &:before {
+    transform: rotateZ(90deg);
+  }
+}
+
+//
+
+.monitor-power-toggle-base {
+  float: right;
+  transform: translate(0, -5px);
+}
+
+.monitor-on {
+  border-color: $color-on;
+
+  & .monitor-power-toggle {
+    & i {
+      color: $color-on;
+      transition: color 0.2s;
+    }
+
+    &:hover i {
+      color: $color-off;
+    }
+  }
+}
+
+.monitor-off {
+  border-color: $color-off;
+
+  & .monitor-power-toggle {
+    & i {
+      color: $color-off;
+      transition: color 0.2s;
+    }
+
+    &:hover i {
+      color: $color-on;
+    }
+  }
+}
+
+.monitor-pending {
+  border-color: $color-pending;
+
+  & .monitor-power-toggle {
+    & i {
+      color: $color-pending;
+      transition: color 0.2s;
+    }
+  }
+}
+
+.monitor-content {
+  margin: 10px 20px 15px 20px;
+  position: relative;
+}
+
+.monitor-header {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.monitor-name {
+  margin-right: 10px;
+}
+
+.monitor-power-toggle {
+  float: right;
+  transform: translate(0, -5px);
+
+  & i {
+    font-size: 28px;
+  }
+}
+
+.monitor-me {
+  cursor: pointer;
+  margin-left: 10px;
+
+  & i {
+    color: white;
+  }
+}
+
+.monitor-spec {
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+
+  & label {
+    margin-right: 10px;
+  }
+
+  /*
+  & select {
+    color: white;
+    margin-right: 10px;
+
+    & option {
+      color: black;
+    }
+  }
+  */
+
+  &.spec-right {
+    text-align: right;
+  }
+}
+
+/**/
+
+.spec-select {
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+  position: relative;
+  transition: color 0.2s;
+  width: 200px;
+
+  &:hover {
+    color: #979a9a;
+  }
+}
+
+.spec-select::before {
+  color: #fff;
+  font-size: 20px;
+  pointer-events: none;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  //background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8nwYAAmoBZ0eMiB8AAAAASUVORK5CYII=) repeat;
+  background-color: #212f3d;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 2px 2px 5px 1px rgba(0,0,0,.3);
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  height: 30px;
+  outline: none;
+  //padding-left: 5px;
+  text-align: center;
+}
+
+select option {
+  color: #666;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select:focus::-ms-value {
+  background-color: transparent;
+}
+
+/**/
+
+.spec-button {
+  border: none;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color:  #979a9a ;
+  }
+}
+
+.spec-button-large {
+  font-size: 20px;
+}
+
+*:disabled {
+  color: $color-off;
+  cursor: not-allowed;
+
+  &:hover {
+    color: $color-off;
+  }
+}
+
+::ng-deep .mat-slide-toggle.mat-disabled .mat-slide-toggle-thumb {
+  background-color: $color-off;
+  cursor: no-drop;
+}
+
+::ng-deep .mat-slide-toggle-thumb {
+  background-color: $color-pending;
+}
+
+::ng-deep .mat-slide-toggle-bar {
+  background-color: $color-slider-bar;
+}
+
+// Slider [checked & disabled]
+::ng-deep .mat-slide-toggle.mat-checked.mat-disabled .mat-slide-toggle-thumb {
+  background-color: $color-off;
+  cursor: no-drop;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: $color-on;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: $color-slider-bar;
+}
+
+::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+  stroke: white;
+}

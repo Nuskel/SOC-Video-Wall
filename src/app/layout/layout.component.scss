@@ -1,0 +1,18 @@
+@import "src/styles";
+
+.layout-wrapper {
+  background-color: $background-color;
+  color: white;
+  height: 100%;
+  margin: 0;
+  width: 100%;
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+
+}

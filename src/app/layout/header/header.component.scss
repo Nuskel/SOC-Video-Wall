@@ -1,0 +1,60 @@
+@import "src/styles";
+
+$header-height: 120px;
+
+.header-wrapper {
+  background-color: $header-color;
+  height: $header-height;
+}
+
+.user-info {
+  padding: 10px;
+}
+
+.center {
+  margin-left: 50%;
+}
+
+.settings {
+  display: block;
+  font-size: 24px;
+  height: $header-height;
+  line-height: $header-height;
+  margin-right: 30px;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  & a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    & i {
+      margin-right: 5px;
+    }
+
+    &:visited {
+      color: white;
+    }
+
+    &:hover {
+      color: $color-pending;
+    }
+  }
+
+}
+
+.animate-link {
+  & i {
+    &:before {
+      transition: transform 0.5s;
+    }
+  }
+
+  &:hover {
+    & i::before {
+      transform: rotateZ(120deg);
+    }
+  }
+}

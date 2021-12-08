@@ -1,0 +1,15 @@
+<div class="header-wrapper">
+  <div class="user-info">
+    <p> Desktop: {{ control.me.name }} </p>
+    <p> IP: {{ control.me.ip }} </p>
+  </div>
+
+  <div class="center">
+    <img height="100" style="position: absolute; top: 10px" src="https://informatik.th-brandenburg.de/typo3conf/ext/sb_config7/Resources/Public/Icons/THB_FB-IM_Logo.svg">
+  </div>
+
+  <div class="settings">
+    <a *ngIf="isSettings" routerLink="/"> <i class="bi bi-arrow-left-circle"></i> Zurück </a>
+    <a *ngIf="!isSettings" class="animate-link" routerLink="/settings"> <i class="bi bi-gear"></i> Settings </a>
+  </div>
+</div>

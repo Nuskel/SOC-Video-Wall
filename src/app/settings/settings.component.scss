@@ -1,0 +1,10 @@
+@import "src/styles";
+
+.settings-wrapper {
+  display: flex;
+  justify-content: center;
+
+  & table {
+    display: inline-block;
+  }
+}
