@@ -16,6 +16,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import { MonitorsComponent } from './layout/monitors/monitors.component';
 import { SettingsComponent } from './settings/settings.component';
 import { OverviewComponent } from './overview/overview.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { OverviewComponent } from './overview/overview.component';
     MatTooltipModule,
     MatSlideToggleModule,
     FormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    BrowserModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Monitor, PowerState} from "../../shared/domain/monitor";
 import {ControlService} from "../../shared/service/control.service";
+import {ScreenService} from "../../shared/service/screen.service";
+import {RequestService} from "./../shared/service/request.service";
 
 @Component({
   selector: 'app-monitor',
@@ -13,7 +15,9 @@ export class MonitorComponent implements OnInit {
   monitorIndex = 0;
 
   constructor(
-    public control: ControlService
+    public control: ControlService,
+    public screen:  ScreenService,
+    public request: RequestService
   ) { }
 
   ngOnInit(): void {
@@ -23,6 +27,7 @@ export class MonitorComponent implements OnInit {
   togglePower() {
     const power = this.power;
 
+    /*
     setTimeout(() => {
       if (power === "off") {
         this.power = "on";
@@ -30,8 +35,16 @@ export class MonitorComponent implements OnInit {
         this.power = "off";
       }
     }, 2000);
+    */
 
-    this.power = "pending";
+    if (power === "off") {
+      this.request.run("1", "11", "1");
+    } else {
+	    this.request.run("1", "11", "0");
+    }
+
+    this.screen.powerMode(this.monitorIndex + 1, this.power === "on" ? 0 : 1);
+    //this.power = "pending";
   }
 
   mockPending() {
