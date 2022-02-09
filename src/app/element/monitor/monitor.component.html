@@ -4,7 +4,7 @@
   <div *ngIf="selectionMode" class="monitor-content-wrapper multiselect-wrapper" (click)="selected = !selected">
     <div [ngClass]="{'multiselect-control': true, 'multiselect-selected': selected}">
       <p> {{ monitor.name }} </p>
-      <p> <i class="multiselect-tick bi bi-check-lg"></i> </p>
+      <p> <em class="multiselect-tick bi bi-check-lg"></em> </p>
       <p class="faded">
         {{ monitor.source }} •
         {{ monitor.desktop }} •
@@ -24,8 +24,8 @@
     <div class="monitor-header">
       <span class="monitor-name"> {{ monitor.name }} </span>
 
-      <i *ngIf="power === 'on'" class="bi bi-display-fill" title="Der Monitor ist an"></i>
-      <i *ngIf="power === 'off'" class="bi bi-display" title="Der Monitor ist aus"></i>
+      <i *ngIf="power === 1" class="bi bi-display-fill" title="Der Monitor ist an"></i>
+      <i *ngIf="power === 0" class="bi bi-display" title="Der Monitor ist aus"></i>
       <i *ngIf="power === 'pending'" class="bi bi-cast" title="Der Monitor verarbeitet einen Befehl"></i>
 
       <i *ngIf="monitor.desktop === control.me.name" class="monitor-me bi bi-person" title="Ich bin der Quell-Desktop"></i>

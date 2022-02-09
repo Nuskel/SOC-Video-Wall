@@ -7,12 +7,27 @@ $header-height: 120px;
   height: $header-height;
 }
 
-.user-info {
-  padding: 10px;
+.logo {
+  height: 90px;
+  padding: 15px 0 0 15px;
+  position: absolute;
 }
 
 .center {
-  margin-left: 50%;
+  height: $header-height;
+  line-height: $header-height;
+  text-align: center;
+}
+
+.title {
+  color: #cc1132;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 32px;
+
+  small {
+    color: #566573;
+    font-size: 12px;
+  }
 }
 
 .settings {

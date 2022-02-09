@@ -1,21 +1,5 @@
-<div class="settings-wrapper">
-  <table>
-    <caption> Monitor-Einstellungen </caption>
-    <thead>
-      <th scope="col"> Index </th>
-      <th scope="col"> IP </th>
-      <th scope="col"> Name </th>
-    </thead>
-    <tbody>
-      <tr *ngFor="let monitor of control.monitors; index as i">
-        <td> {{ i + 1 }} </td>
-        <td> {{ monitor.ip }} </td>
-        <td> {{ monitor.name }} </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table>
+<div *ngIf="!loading" class="settings-wrapper">
+  <table class="settings-table">
     <caption> Desktop-Einstellungen </caption>
     <thead>
       <th scope="col"> Index </th>
@@ -32,4 +16,30 @@
       </tr>
     </tbody>
   </table>
+
+  <span class="spacer"></span>
+
+  <table *ngIf="config" class="settings-table">
+    <caption> Devices </caption>
+    <thead>
+    <th scope="col"> Index </th>
+    <th scope="col"> ID </th>
+    <th scope="col"> IP </th>
+    <th scope="col"> Name </th>
+    </thead>
+    <tbody>
+    <tr *ngFor="let d of devices; index as i">
+      <td> {{ i + 1 }} </td>
+      <td> {{ d[0] }} </td>
+      <td> {{ d[1].ip }} </td>
+      <td> {{ d[1].name }} </td>
+    </tr>
+    </tbody>
+  </table>
 </div>
+
+<div *ngIf="loading" class="load-wrapper">
+  <mat-spinner diameter="40" color="accent"></mat-spinner>
+</div>
+
+<button *ngIf="!loading" class="x-button" [disabled]="loading" (click)="fetchConfig()"> <span class="bi bi-arrow-clockwise"></span> Reload Config </button>

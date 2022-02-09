@@ -8,15 +8,14 @@ import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { MonitorComponent } from './element/monitor/monitor.component';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { ControlComponent } from './layout/control/control.component';
-import {FormsModule} from "@angular/forms";
-import {MatCheckboxModule} from "@angular/material/checkbox";
+import { FormsModule } from "@angular/forms";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MonitorsComponent } from './layout/monitors/monitors.component';
 import { SettingsComponent } from './settings/settings.component';
 import { OverviewComponent } from './overview/overview.component';
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({

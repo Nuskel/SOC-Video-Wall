@@ -8,7 +8,6 @@ import { ControlService } from "../../shared/service/control.service";
 })
 export class ControlComponent implements OnInit {
 
-  wallMode = false;
   changes = false;
 
   constructor(
@@ -25,7 +24,7 @@ export class ControlComponent implements OnInit {
 
     setTimeout(() => {
       this.control.monitors.filter(m => m.selected).forEach(m => {
-        m.power = "off";
+        m.power = 0;
       })
     }, 2000);
   }
@@ -43,7 +42,7 @@ export class ControlComponent implements OnInit {
 
     setTimeout(() => {
       this.control.monitors.filter(m => m.selected).forEach(m => {
-        m.power = "on";
+        m.power = 0;
       })
     }, 1200);
   }
@@ -53,7 +52,7 @@ export class ControlComponent implements OnInit {
 
     setTimeout(() => {
       this.control.monitors.filter(m => m.selected).forEach(m => {
-        m.power = "off";
+        m.power = 0;
       })
     }, 1200);
   }
@@ -66,7 +65,7 @@ export class ControlComponent implements OnInit {
     setTimeout(() => {
       this.control.monitors.filter(m => m.selected).forEach(m => {
         m.videowall = true;
-        m.power = "on";
+        m.power = 1;
       })
     }, 1200);
   }
@@ -77,7 +76,7 @@ export class ControlComponent implements OnInit {
     setTimeout(() => {
       this.control.monitors.filter(m => m.selected).forEach(m => {
         m.videowall = false;
-        m.power = "on";
+        m.power = 1;
       })
     }, 1200);
   }

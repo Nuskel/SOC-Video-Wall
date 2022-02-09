@@ -1,4 +1,3 @@
-import * as net from 'net';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -41,7 +40,7 @@ export class ScreenService {
     });
   }
 */
-  powerMode(id, mode: 0 | 1) {
+  powerMode(id: number, mode: 0 | 1) {
    // this.execute(id, 0x11, [mode]);
   }
 

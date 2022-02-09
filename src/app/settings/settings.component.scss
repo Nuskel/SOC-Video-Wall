@@ -2,9 +2,78 @@
 
 .settings-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 10px;
 
   & table {
     display: inline-block;
+
+    caption {
+      font-size: 18px;
+      margin-bottom: 10px;
+      text-align: left;
+      text-decoration: underline;
+    }
+  }
+}
+
+.spacer {
+  width: 30px;
+}
+
+.settings-table {
+  th {
+    background-color: #212F3C;
+  }
+
+  tr {
+    cursor: pointer;
+
+    td {
+      padding: 10px;
+    }
+  }
+
+  tr:nth-child(2n+1) {
+    background-color: #566573;
+
+    &:hover {
+      background-color: lighten(#566573, 8);
+    }
+  }
+
+  tr:nth-child(2n) {
+    background-color: #666666;
+
+    &:hover {
+      background-color: lighten(#666666, 8);
+    }
+  }
+}
+
+.load-wrapper {
+  align-items: center;
+  display: flex;
+  height: 50vh;
+  justify-content: center;
+  width: 50vw;
+}
+
+.x-button {
+  background-color: $header-color;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 2px 2px 5px 1px rgba(0,0,0,.3);
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  outline: none;
+  padding: 10px;
+  text-align: center;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: lighten($header-color, 4);
   }
 }

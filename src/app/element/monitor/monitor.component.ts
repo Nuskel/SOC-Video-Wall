@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Monitor, PowerState} from "../../shared/domain/monitor";
 import {ControlService} from "../../shared/service/control.service";
 import {ScreenService} from "../../shared/service/screen.service";
-import {RequestService} from "./../shared/service/request.service";
+import {RequestService} from "../../shared/service/request.service";
 
 @Component({
   selector: 'app-monitor',
@@ -27,24 +27,25 @@ export class MonitorComponent implements OnInit {
   togglePower() {
     const power = this.power;
 
-    /*
-    setTimeout(() => {
-      if (power === "off") {
-        this.power = "on";
-      } else {
-        this.power = "off";
-      }
-    }, 2000);
-    */
-
-    if (power === "off") {
-      this.request.run("1", "11", "1");
+    if (power === 0) {
+      this.power = "pending";
+      this.request.togglePower(this.monitor.name, 1).subscribe(res => {
+        if (res.error) {
+          this.power = power;
+        } else {
+          this.power = (<PowerState>res.data);
+        }
+      });
     } else {
-	    this.request.run("1", "11", "0");
+      this.power = "pending";
+      this.request.togglePower(this.monitor.name, 0).subscribe(res => {
+        if (res.error) {
+          this.power = power;
+        } else {
+          this.power = (<PowerState>res.data);
+        }
+      });
     }
-
-    this.screen.powerMode(this.monitorIndex + 1, this.power === "on" ? 0 : 1);
-    //this.power = "pending";
   }
 
   mockPending() {
@@ -86,21 +87,21 @@ export class MonitorComponent implements OnInit {
   }
 
   get controlDisabled() {
-    return this.power === "pending" || this.power === "off";
+    return this.power === "pending" || this.power === 0;
   }
 
   get borderClass() {
     switch (this.power) {
-      case "on": return "monitor-on";
-      case "off": return "monitor-off";
+      case 1: return "monitor-on";
+      case 0: return "monitor-off";
       case "pending": return "monitor-pending";
     }
   }
 
   get powerToggleTitle() {
     switch (this.power) {
-      case "on": return "Monitor ausschalten";
-      case "off": return "Monitor anschalten";
+      case 1: return "Monitor ausschalten";
+      case 0: return "Monitor anschalten";
       case "pending": return "Warten...";
     }
   }

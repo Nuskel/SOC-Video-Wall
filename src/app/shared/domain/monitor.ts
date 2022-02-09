@@ -1,4 +1,4 @@
-export type PowerState = "on" | "off" | "pending";
+export type PowerState = 1 | 0 | "pending";
 
 export interface Monitor {
 
