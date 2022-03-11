@@ -4,14 +4,14 @@
   <div *ngIf="selectionMode" class="monitor-content-wrapper multiselect-wrapper" (click)="selected = !selected">
     <div [ngClass]="{'multiselect-control': true, 'multiselect-selected': selected}">
       <p> {{ monitor.name }} </p>
-      <p> <em class="multiselect-tick bi bi-check-lg"></em> </p>
+      <p> <i class="multiselect-tick bi bi-check-lg"></i> </p> <!-- <i> tag muss bleiben! -->
       <p class="faded">
         {{ monitor.source }} •
         {{ monitor.desktop }} •
 
         <!-- Video-Wall mode -->
-        <i *ngIf="monitor.videowall" class="videowall bi bi-grid-1x2"></i>
-        <i *ngIf="!monitor.videowall" class="bi bi-grid"></i>
+        <span *ngIf="monitor.videowall" class="videowall bi bi-grid-1x2"></span>
+        <span *ngIf="!monitor.videowall" class="bi bi-grid"></span>
       </p>
     </div>
   </div>
@@ -24,36 +24,33 @@
     <div class="monitor-header">
       <span class="monitor-name"> {{ monitor.name }} </span>
 
-      <i *ngIf="power === 1" class="bi bi-display-fill" title="Der Monitor ist an"></i>
-      <i *ngIf="power === 0" class="bi bi-display" title="Der Monitor ist aus"></i>
-      <i *ngIf="power === 'pending'" class="bi bi-cast" title="Der Monitor verarbeitet einen Befehl"></i>
+      <span *ngIf="power === 1" class="bi bi-display-fill" title="Der Monitor ist an"></span>
+      <span *ngIf="power === 0" class="bi bi-display" title="Der Monitor ist aus"></span>
+      <span *ngIf="power === 'pending'" class="bi bi-cast" title="Der Monitor verarbeitet einen Befehl"></span>
 
-      <i *ngIf="monitor.desktop === control.me.name" class="monitor-me bi bi-person" title="Ich bin der Quell-Desktop"></i>
+      <span *ngIf="monitor.desktop === control.me.name" class="monitor-me bi bi-person" title="Ich bin der Quell-Desktop"></span>
 
-      <button class="monitor-power-toggle spec-button" [title]="powerToggleTitle" (click)="togglePower()"> <i class="bi bi-power"></i> </button>
+      <button class="monitor-power-toggle spec-button" [title]="powerToggleTitle" (click)="togglePower()"> <i class="bi bi-power"></i> </button> <!-- <i> tag muss bleiben! -->
     </div>
 
     <div class="monitor-spec" title="Eingangs-PC">
-      <label> <i class="bi bi-pc-display-horizontal"></i> </label>
-      <select class="spec-select" [disabled]="controlDisabled">
-        <option> SOC 01 </option>
-        <option> SOC 02 </option>
+      <label> <span class="bi bi-pc-display-horizontal"></span> </label>
+      <select class="spec-select" [disabled]="controlDisabled" (change)="selectDesktop($event.target)">
+        <option *ngFor="let d of control.desktops" [value]="d.name"> {{ d.name }} </option>
       </select>
-      <button class="spec-button spec-button-large" title="Mich als Eingang setzen" [disabled]="controlDisabled"> <i class="bi bi-person-circle"></i> </button>
+      <button class="spec-button spec-button-large" title="Mich als Eingang setzen" [disabled]="controlDisabled"> <span class="bi bi-person-circle"></span> </button>
     </div>
 
     <div class="monitor-spec" title="Quelle">
-      <label> <i class="bi bi-hdmi"></i> </label>
-      <select class="spec-select" [disabled]="controlDisabled">
-        <option> HDMI 1 </option>
-        <option> HDMI 2 </option>
-        <option> Display Port 1 </option>
+      <label> <span class="bi bi-hdmi"></span> </label>
+      <select class="spec-select" [disabled]="controlDisabled" [value]="source" (change)="selectSource($event.target)">
+        <option *ngFor="let s of Sources" [value]="s.id"> {{ s.name }} </option>
       </select>
     </div>
 
     <div class="monitor-spec">
-      <label> <i class="videowall bi bi-grid-1x2"></i> </label>
-      <mat-slide-toggle [disabled]="controlDisabled" (change)="mockPending()"></mat-slide-toggle>
+      <label> <span class="videowall bi bi-grid-1x2"></span> </label>
+      <mat-slide-toggle [disabled]="controlDisabled" (change)="toggleVideoWall()"></mat-slide-toggle>
       <span style="margin-left: 5px"> Videowand </span>
     </div>
   </div>

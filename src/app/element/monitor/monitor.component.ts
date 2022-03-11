@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Monitor, PowerState} from "../../shared/domain/monitor";
+import {Monitor, PowerState, Sources} from "../../shared/domain/monitor";
 import {ControlService} from "../../shared/service/control.service";
 import {ScreenService} from "../../shared/service/screen.service";
 import {RequestService} from "../../shared/service/request.service";
@@ -11,6 +11,8 @@ import {RequestService} from "../../shared/service/request.service";
 })
 export class MonitorComponent implements OnInit {
 
+  readonly Sources = Sources;
+
   @Input()
   monitorIndex = 0;
 
@@ -21,31 +23,29 @@ export class MonitorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    return;
+    this.control.loadMonitor(this.monitorIndex).subscribe();
   }
 
   togglePower() {
-    const power = this.power;
+    this.control.togglePower(this.monitorIndex);
+  }
 
-    if (power === 0) {
-      this.power = "pending";
-      this.request.togglePower(this.monitor.name, 1).subscribe(res => {
-        if (res.error) {
-          this.power = power;
-        } else {
-          this.power = (<PowerState>res.data);
-        }
-      });
-    } else {
-      this.power = "pending";
-      this.request.togglePower(this.monitor.name, 0).subscribe(res => {
-        if (res.error) {
-          this.power = power;
-        } else {
-          this.power = (<PowerState>res.data);
-        }
-      });
-    }
+  toggleVideoWall() {
+    this.control.toggleVideoWall(this.monitorIndex);
+  }
+
+  selectSource(x: any) {
+    this.control.selectSource(this.monitorIndex, x.value);
+  }
+
+  selectDesktop(x: any) {
+    this.bindMonitor(x.value);
+  }
+
+  bindMonitor(desktop: string) {
+    this.control.bindMonitor(desktop, this.monitor.name).subscribe(res => {
+      console.log("YES!", res);
+    });
   }
 
   mockPending() {
@@ -68,6 +68,10 @@ export class MonitorComponent implements OnInit {
 
   set power(power: PowerState) {
     this.control.monitors[this.monitorIndex].power = power;
+  }
+
+  get source() {
+    return this.control.monitors[this.monitorIndex].source;
   }
 
   get selectionMode() {

@@ -8,6 +8,10 @@
     </div>
     <p> Desktop: {{ control.me.name }} </p>
     <p> IP: {{ control.me.ip }} </p>
+
+    <select class="spec-select" (change)="setMe($event.target)" [value]="control.me.name">
+      <option *ngFor="let d of control.desktops" [value]="d.name"> {{ d.name }} </option>
+    </select>
   </div>
 
   <div class="content-wrapper">

@@ -37,7 +37,7 @@ export class SettingsComponent implements OnInit {
   fetchConfig() {
     this.loading = true;
     this.request.fetchConfig().subscribe(cfg => {
-      (<any>this.config) = cfg;
+      (<any>this.config) = cfg.data;
       this.loading = false;
     });
   }

@@ -11,3 +11,26 @@ export interface Monitor {
   selected?: boolean;
 
 }
+
+export interface DeviceMonitor {
+
+  power: string;
+  source: string;
+  videowall: string;
+
+}
+
+export const Sources = [
+  {
+    id: "hdmi1",
+    name: "HDMI 1"
+  },
+  {
+    id: "hdmi2",
+    name: "HDMI 2"
+  },
+  {
+    id: "display_port",
+    name: "Display Port"
+  }
+];

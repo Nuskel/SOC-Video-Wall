@@ -13,4 +13,12 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  setMe(target: any) {
+    const desktop = this.control.desktops.find(d => d.name === target.value);
+
+    if (desktop) {
+      this.control.me = desktop;
+    }
+  }
+
 }
