@@ -103,8 +103,8 @@ export class ControlService {
 
     return this.request.loadDevice(monitor.name).pipe(tap(res => {
       if (res.data) {
-        monitor.power = res.data.power === "1" ? 1 : 0;
-        monitor.videowall = res.data.videowall === "1";
+        monitor.power = res.data.power == "1" ? 1 : 0;
+        monitor.videowall = res.data.videowall == "1";
         monitor.source = res.data.source;
       }
     }));

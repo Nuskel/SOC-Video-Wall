@@ -74,6 +74,10 @@ export class MonitorComponent implements OnInit {
     return this.control.monitors[this.monitorIndex].source;
   }
 
+  get videowall() {
+	  return this.control.monitors[this.monitorIndex].videowall;
+  }
+
   get selectionMode() {
     return this.control.selectionMode;
   }

@@ -50,7 +50,7 @@
 
     <div class="monitor-spec">
       <label> <span class="videowall bi bi-grid-1x2"></span> </label>
-      <mat-slide-toggle [disabled]="controlDisabled" (change)="toggleVideoWall()"></mat-slide-toggle>
+      <mat-slide-toggle [disabled]="controlDisabled" [checked]="videowall" (change)="toggleVideoWall()"></mat-slide-toggle>
       <span style="margin-left: 5px"> Videowand </span>
     </div>
   </div>
