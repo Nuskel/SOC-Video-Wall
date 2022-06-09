@@ -105,6 +105,7 @@ export class ControlService {
       if (res.data) {
         monitor.power = res.data.power == "1" ? 1 : 0;
         monitor.videowall = res.data.videowall == "1";
+	monitor.desktop = res.data.desktop || "(missing)";
         monitor.source = res.data.source;
       }
     }));

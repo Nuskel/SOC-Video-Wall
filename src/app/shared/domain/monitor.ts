@@ -16,6 +16,7 @@ export interface DeviceMonitor {
 
   power: string;
   source: string;
+  desktop: string;
   videowall: string;
 
 }
