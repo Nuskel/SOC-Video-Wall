@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Sources } from "../../shared/domain/monitor";
 import { ControlService } from "../../shared/service/control.service";
 
 @Component({
@@ -8,25 +9,50 @@ import { ControlService } from "../../shared/service/control.service";
 })
 export class ControlComponent implements OnInit {
 
+  readonly Sources = Sources;
+
   changes = false;
+
+  desktop?: any;
+  source?: any = Sources[0];
 
   constructor(
     public control: ControlService
-  ) { }
+  ) {
+    this.desktop = control.desktops[0];
+  }
 
   ngOnInit(): void {
     return;
   }
 
+  changeDesktop(desktop: any) {
+    this.desktop = desktop.value;
+    this.changes = true;
+  }
+
+  changeSource(source: any) {
+    this.source = source.value;
+    this.changes = true;
+  }
+
+  selectMe() {
+    this.control.monitors.filter(m => m.selected).forEach(m => {
+      this.control.bindMonitor(m, this.control.me.name).subscribe();
+    });
+  }
+
   applyChanges() {
     this.changes = false;
-    this.control.monitors.filter(m => m.selected).forEach(m => m.power = "pending");
+    this.control.monitors.filter(m => m.selected).forEach((m, i) => {
+      if (this.source != undefined) {
+        this.control.selectSource(m, this.source.id).subscribe();
+      }
 
-    setTimeout(() => {
-      this.control.monitors.filter(m => m.selected).forEach(m => {
-        m.power = 0;
-      })
-    }, 2000);
+      if (this.desktop != undefined) {
+        this.control.bindMonitor(m, this.desktop).subscribe();
+      }
+    });
   }
 
   selectAll() {
@@ -38,47 +64,19 @@ export class ControlComponent implements OnInit {
   }
 
   toggleOn() {
-    this.control.monitors.filter(m => m.selected).forEach(m => m.power = "pending");
-
-    setTimeout(() => {
-      this.control.monitors.filter(m => m.selected).forEach(m => {
-        m.power = 0;
-      })
-    }, 1200);
+    this.control.monitors.filter(m => m.selected).forEach(m => this.control.togglePower(m, 1).subscribe());
   }
 
   toggleOff() {
-    this.control.monitors.filter(m => m.selected).forEach(m => m.power = "pending");
-
-    setTimeout(() => {
-      this.control.monitors.filter(m => m.selected).forEach(m => {
-        m.power = 0;
-      })
-    }, 1200);
+    this.control.monitors.filter(m => m.selected).forEach(m => this.control.togglePower(m, 0).subscribe());
   }
 
   toggleVideoWallOn() {
-    this.control.monitors.filter(m => m.selected).forEach(m => m.power = "pending");
-
-    // TODO: validate -> dont act on powered off displays
-
-    setTimeout(() => {
-      this.control.monitors.filter(m => m.selected).forEach(m => {
-        m.videowall = true;
-        m.power = 1;
-      })
-    }, 1200);
+    this.control.monitors.filter(m => m.selected).forEach(m => this.control.toggleVideoWall(m, true).subscribe());
   }
 
   toggleVideoWallOff() {
-    this.control.monitors.filter(m => m.selected).forEach(m => m.power = "pending");
-
-    setTimeout(() => {
-      this.control.monitors.filter(m => m.selected).forEach(m => {
-        m.videowall = false;
-        m.power = 1;
-      })
-    }, 1200);
+    this.control.monitors.filter(m => m.selected).forEach(m => this.control.toggleVideoWall(m, false).subscribe());
   }
 
   get selectionMode() {

@@ -9,7 +9,7 @@ import { DeviceMonitor } from "../domain/monitor";
 })
 export class RequestService {
 
-  static readonly BASE = "https://192.168.35.38:9001/api/v1";
+  static readonly BASE = "http://localhost:9001/api/v1"; //https://192.168.35.38:9001/api/v1";
   static readonly R_CONFIG = "";
   static readonly DEVICES = "devices";
 
@@ -37,8 +37,8 @@ export class RequestService {
     return this.post<string, string>(`${ RequestService.DEVICES }/${ device }/source`, id, "text");
   }
 
-  selectDesktop(desktop: string, monitor: string) {
-    return this.post<string, any>(`${ RequestService.DEVICES }/aten-switch/bind`, `${ desktop },${ monitor }`);
+  selectDesktop(monitor: string, desktop: string) {
+    return this.post<boolean, string>(`${ RequestService.DEVICES }/aten-switch/bind`, `${ desktop },${ monitor }`);
   }
 
   loadDevice(name: string) {

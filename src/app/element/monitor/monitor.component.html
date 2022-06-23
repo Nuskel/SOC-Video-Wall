@@ -6,7 +6,7 @@
       <p> {{ monitor.name }} </p>
       <p> <i class="multiselect-tick bi bi-check-lg"></i> </p> <!-- <i> tag muss bleiben! -->
       <p class="faded">
-        {{ monitor.source }} •
+        {{ sourceName(monitor.source) }} •
         {{ monitor.desktop }} •
 
         <!-- Video-Wall mode -->
@@ -35,22 +35,22 @@
 
     <div class="monitor-spec" title="Eingangs-PC">
       <label> <span class="bi bi-pc-display-horizontal"></span> </label>
-      <select class="spec-select" [disabled]="controlDisabled" [value]="desktop" (change)="selectDesktop($event.target)">
-        <option *ngFor="let d of control.desktops" [value]="d.name"> {{ d.name }} </option>
+      <select class="spec-select" [disabled]="controlDisabled" [value]="desktop" (change)="selectDesktop($event.target)" #desktopSelect>
+        <option *ngFor="let d of control.desktops" [value]="d.name" [selected]="desktop === d.name"> {{ d.name }} </option>
       </select>
-      <button class="spec-button spec-button-large" title="Mich als Eingang setzen" [disabled]="controlDisabled"> <span class="bi bi-person-circle"></span> </button>
+      <button class="spec-button spec-button-large" title="Mich als Eingang setzen" [disabled]="controlDisabled" (click)="selectMe(desktopSelect)"> <span class="bi bi-person-circle"></span> </button>
     </div>
 
     <div class="monitor-spec" title="Quelle">
       <label> <span class="bi bi-hdmi"></span> </label>
       <select class="spec-select" [disabled]="controlDisabled" [value]="source" (change)="selectSource($event.target)">
-        <option *ngFor="let s of Sources" [value]="s.id"> {{ s.name }} </option>
+        <option *ngFor="let s of Sources" [value]="s.id" [selected]="s.id === source"> {{ s.name }} </option>
       </select>
     </div>
 
     <div class="monitor-spec">
       <label> <span class="videowall bi bi-grid-1x2"></span> </label>
-      <mat-slide-toggle [disabled]="controlDisabled" [checked]="videowall" (change)="toggleVideoWall()"></mat-slide-toggle>
+      <mat-slide-toggle [disabled]="controlDisabled" [checked]="videowall" (change)="toggleVideoWall(videowallSlider)" #videowallSlider></mat-slide-toggle>
       <span style="margin-left: 5px"> Videowand </span>
     </div>
   </div>

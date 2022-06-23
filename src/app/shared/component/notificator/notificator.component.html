@@ -1,0 +1,10 @@
+<div class="notification-wrapper">
+  <div *ngFor="let n of service.notifications; index as i" [ngClass]="['notification', n.class]" (click)="remove(n)">
+    <div *ngIf="n.title" class="notification-title">
+      <span> {{ n.title }} </span>
+    </div>
+    <div class="notification-text">
+      <p> {{ n.text }} </p>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ControlService} from "../shared/service/control.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-layout',
@@ -8,7 +9,10 @@ import {ControlService} from "../shared/service/control.service";
 })
 export class LayoutComponent implements OnInit {
 
-  constructor(public control: ControlService) { }
+  constructor(
+    private router: Router,
+    public control: ControlService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -18,6 +22,7 @@ export class LayoutComponent implements OnInit {
 
     if (desktop) {
       this.control.me = desktop;
+      this.router.navigateByUrl(`#${ desktop.name }`);
     }
   }
 

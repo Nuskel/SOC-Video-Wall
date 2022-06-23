@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import {Monitor, PowerState} from "../domain/monitor";
 import {Desktop} from "../domain/desktop";
 import {RequestService} from "./request.service";
-import {tap} from "rxjs";
+import {map, Observable} from "rxjs";
+import {NotificationService} from "./notification.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ControlService {
 
-  // TODO: load from BE (/config?devices=client)
   desktops: Desktop[] = [
     {
       ip: "192.168.35.131",
@@ -37,7 +38,6 @@ export class ControlService {
     }
   ];
 
-  // TODO: load from BE (/config?devices=monitor)
   monitors: Monitor[] = [
     {
       ip: "192.168.35.161",
@@ -49,7 +49,7 @@ export class ControlService {
     },
     {
       ip: "192.168.35.162",
-      desktop: "soc-pc01",
+      desktop: "soc-pc02",
       name: "soc-mon02",
       power: 1,
       source: "hdmi1",
@@ -57,7 +57,7 @@ export class ControlService {
     },
     {
       ip: "192.168.35.163",
-      desktop: "soc-pc04",
+      desktop: "soc-pc03",
       name: "soc-mon03",
       power: 1,
       source: "hdmi1",
@@ -65,7 +65,7 @@ export class ControlService {
     },
     {
       ip: "192.168.35.164",
-      desktop: "soc-pc01",
+      desktop: "soc-pc04",
       name: "soc-mon04",
       power: 1,
       source: "hdmi1",
@@ -73,7 +73,7 @@ export class ControlService {
     },
     {
       ip: "192.168.35.165",
-      desktop: "soc-pc02",
+      desktop: "soc-pc05",
       name: "soc-mon05",
       power: 1,
       source: "hdmi1",
@@ -81,7 +81,7 @@ export class ControlService {
     },
     {
       ip: "192.168.35.166",
-      desktop: "soc-pc01",
+      desktop: "soc-pc06",
       name: "soc-mon06",
       power: 1,
       source: "hdmi1",
@@ -93,97 +93,122 @@ export class ControlService {
   selectionMode = false;
 
   constructor(
-    private request: RequestService
-  ) { }
+    private route: ActivatedRoute,
+    private request: RequestService,
+    private notify: NotificationService
+  ) {
+    this.route.fragment.subscribe(f => {
+      if (f) {
+        const desktop = this.desktops.find(x => x.name === f);
+
+        if (desktop) {
+          this.me = desktop;
+        }
+      }
+    });
+  }
 
   loadMonitor(index: number) {
     const monitor = this.monitors[index];
 
     monitor.power = "pending";
 
-    return this.request.loadDevice(monitor.name).pipe(tap(res => {
+    return this.request.loadDevice(monitor.name).pipe(map(res => {
       if (res.data) {
         monitor.power = res.data.power == "1" ? 1 : 0;
         monitor.videowall = res.data.videowall == "1";
-	monitor.desktop = res.data.desktop || "(missing)";
+	      monitor.desktop = res.data.desktop || "(missing)";
         monitor.source = res.data.source;
+      } else {
+        this.notify.error("Konnte den Zustand des Monitors nicht abfragen.", monitor.name);
       }
+
+      return !res.error && res.data !== undefined;
     }));
   }
 
-  bindMonitor(desktop: string, monitor: string) {
-    return this.request.selectDesktop(desktop, monitor);
+  bindMonitor(monitor: Monitor, desktop: string): Observable<boolean> {
+    const power = monitor.power;
+    const current = monitor.desktop;
+
+    monitor.power = "pending";
+
+    return this.request.selectDesktop(monitor.name, desktop).pipe(map(res => {
+      if (res.error || !res.data) {
+        this.notify.error("Konnte den Monitor nicht dem Desktop zuordnen.", monitor.name);
+
+        monitor.desktop = current;
+      } else if (res.data) {
+        monitor.desktop = desktop;
+      }
+
+      monitor.power = power;
+
+      return !res.error && res.data !== undefined;
+    }));
   }
 
-  selectSource(index: number, id: string) {
-    const monitor = this.monitors[index];
+  selectSource(monitor: Monitor, id: string): Observable<boolean> {
     const power = monitor.power;
 
     monitor.power = "pending";
-    this.request.selectSource(monitor.name, id).subscribe(res => {
+
+    return this.request.selectSource(monitor.name, id).pipe(map(res => {
       if (res.error) {
-        console.error(res.error);
+        this.notify.error("Konnte die Quelle nicht ändern.", monitor.name);
       } else if (res.data) {
         monitor.source = res.data;
       }
 
       monitor.power = power;
-    });
+
+      return !res.error && res.data !== undefined;
+    }));
   }
 
-  toggleVideoWall(index: number) {
-    const monitor = this.monitors[index];
-    const vw = monitor.videowall;
+  toggleVideoWall(monitor: Monitor, setMode?: boolean): Observable<boolean> {
+    const vw = setMode !== undefined ? setMode : !monitor.videowall;
     const power = monitor.power;
 
-    if (!vw) {
-      monitor.power = "pending";
-      this.request.toggleVideoWall(monitor.name, 1).subscribe(res => {
-        if (res.error) {
-          console.error(res.error);
-        } else {
-          monitor.videowall = true;
-        }
+    monitor.power = "pending";
 
-        monitor.power = power;
-      });
-    } else {
-      monitor.power = "pending";
-      this.request.toggleVideoWall(monitor.name, 0).subscribe(res => {
-        if (res.error) {
-          console.error(res.error);
+    return this.request.toggleVideoWall(monitor.name, vw ? 1 : 0).pipe(map(res => {
+      if (res.error) {
+        if (vw) {
+          this.notify.error("Konnte den Videowand-Modus nicht einschalten.", monitor.name);
         } else {
-          monitor.videowall = false;
+          this.notify.error("Konnte den Videowand-Modus nicht ausschalten.", monitor.name);
         }
+      } else {
+        monitor.videowall = false;
+      }
 
-        monitor.power = power;
-      });
-    }
+      monitor.power = power;
+
+      return !res.error;
+    }));
   }
 
-  togglePower(index: number) {
-    const monitor = this.monitors[index];
-    const power = monitor.power;
+  togglePower(monitor: Monitor, setPower?: PowerState): Observable<boolean> {
+    const power = setPower !== undefined ? setPower : !monitor.power;
 
-    if (power === 0) {
-      monitor.power = "pending";
-      this.request.togglePower(monitor.name, 1).subscribe(res => {
-        if (res.error) {
-          monitor.power = power;
+    monitor.power = "pending";
+
+    return this.request.togglePower(monitor.name, power ? 1 : 0).pipe(map(res => {
+      if (res.error) {
+        monitor.power = !power ? 1 : 0;
+
+        if (power) {
+          this.notify.error("Konnte den Monitor nicht einschalten.", monitor.name);
         } else {
-          monitor.power = (<PowerState>res.data);
+          this.notify.error("Konnte den Monitor nicht ausschalten.", monitor.name);
         }
-      });
-    } else {
-      monitor.power = "pending";
-      this.request.togglePower(monitor.name, 0).subscribe(res => {
-        if (res.error) {
-          monitor.power = power;
-        } else {
-          monitor.power = (<PowerState>res.data);
-        }
-      });
-    }
+      } else {
+        monitor.power = (<PowerState>res.data);
+      }
+
+      return !res.error;
+    }));
   }
 
 }

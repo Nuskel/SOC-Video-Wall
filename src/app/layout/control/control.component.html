@@ -40,36 +40,38 @@
         <label> <i class="bi bi-pc-display-horizontal"></i> </label>
         <select class="spec-select"
                 matTooltip="Desktop"
-                matTooltipPosition="above" (change)="changes = true">
-          <option> SOC 01 </option>
-          <option> SOC 02 </option>
+                matTooltipPosition="above"
+                [value]="desktop"
+                (change)="changeDesktop($event.target)">
+          <option *ngFor="let d of control.desktops" [value]="d.name"> {{ d.name }} </option>
         </select>
 
         <button class="x-button"
                 matTooltip="Mich als Quell-PC setzen"
-                matTooltipPosition="above"> <i class="bi bi-person-circle"></i> </button>
+                matTooltipPosition="above"
+                (click)="selectMe()"
+        > <i class="bi bi-person-circle"></i> </button>
       </div>
 
       <div class="control" title="Quelle">
         <label> <i class="bi bi-hdmi"></i> </label>
         <select class="spec-select"
                 matTooltip="Quelle"
-                matTooltipPosition="above" (change)="changes = true">
-          <option> HDMI 1 </option>
-          <option> HDMI 2 </option>
-          <option> Display Port 1 </option>
+                matTooltipPosition="above"
+                [value]="source"
+                (change)="changeSource($event.target)">
+          <option *ngFor="let s of Sources" [value]="s.id"> {{ s.name }} </option>
         </select>
       </div>
 
       <!-- TODO: Changes sind auch, wenn ein Feld aus/abgewählt wird !! -->
 
-      <div class="control">
+      <!--<div class="control">
         <button class="y-button"
                 matTooltipPosition="above"
                 [matTooltip]="changes ? 'Änderungen übernehmen' : ''"
-                [disabled]="!changes"
                 (click)="applyChanges()"> <i class="bi bi-caret-right-fill"></i> Ausführen </button>
-      </div>
+      </div>-->
 
       <!-- Directy executed: -->
 

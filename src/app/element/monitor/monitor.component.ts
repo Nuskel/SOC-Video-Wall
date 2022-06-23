@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Monitor, PowerState, Sources} from "../../shared/domain/monitor";
+import {PowerState, Sources} from "../../shared/domain/monitor";
 import {ControlService} from "../../shared/service/control.service";
 import {ScreenService} from "../../shared/service/screen.service";
 import {RequestService} from "../../shared/service/request.service";
@@ -27,35 +27,45 @@ export class MonitorComponent implements OnInit {
   }
 
   togglePower() {
-    this.control.togglePower(this.monitorIndex);
+    this.control.togglePower(this.monitor).subscribe();
   }
 
-  toggleVideoWall() {
-    this.control.toggleVideoWall(this.monitorIndex);
-  }
-
-  selectSource(x: any) {
-    this.control.selectSource(this.monitorIndex, x.value);
-  }
-
-  selectDesktop(x: any) {
-    this.bindMonitor(x.value);
-  }
-
-  bindMonitor(desktop: string) {
-    this.control.bindMonitor(desktop, this.monitor.name).subscribe(res => {
-      console.log("YES!", res);
+  toggleVideoWall(x: any) {
+    this.control.toggleVideoWall(this.monitor).subscribe(s => {
+      if (!s) {
+        x.toggle();
+      }
     });
   }
 
-  mockPending() {
-    const power = this.power;
+  selectSource(x: any) {
+    const current = this.source;
 
-    setTimeout(() => {
-      this.power = power;
-    }, 2000);
+    this.control.selectSource(this.monitor, x.value).subscribe(success => {
+      if (!success) {
+        x.value = current;
+      }
+    });
+  }
 
-    this.power = "pending";
+  selectDesktop(x: any) {
+    this.bindMonitor(x.value, x);
+  }
+
+  selectMe(x: any) {
+    x.value = this.control.me.name;
+
+    this.bindMonitor(this.control.me.name, x);
+  }
+
+  bindMonitor(desktop: string, x: any) {
+    const current = this.monitor.desktop;
+
+    this.control.bindMonitor(this.monitor, desktop).subscribe(success => {
+      if (!success) {
+        x.value = current;
+      }
+    });
   }
 
   get monitor() {
@@ -72,6 +82,10 @@ export class MonitorComponent implements OnInit {
 
   get source() {
     return this.control.monitors[this.monitorIndex].source;
+  }
+
+  sourceName(source: string) {
+    return Sources.find(x => source === x.id)?.name || "???";
   }
 
   get videowall() {

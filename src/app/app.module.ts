@@ -16,7 +16,9 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MonitorsComponent } from './layout/monitors/monitors.component';
 import { SettingsComponent } from './settings/settings.component';
 import { OverviewComponent } from './overview/overview.component';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { NotificatorComponent } from './shared/component/notificator/notificator.component';
+import {GeneralHttpInterceptor} from "./shared/http-interceptor";
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { HttpClientModule } from '@angular/common/http';
     ControlComponent,
     MonitorsComponent,
     SettingsComponent,
-    OverviewComponent
+    OverviewComponent,
+    NotificatorComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,9 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: GeneralHttpInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
