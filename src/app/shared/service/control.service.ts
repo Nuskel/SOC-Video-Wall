@@ -108,6 +108,32 @@ export class ControlService {
     });
   }
 
+  initLoad() {
+    this.request.fetchDevices().subscribe(res => {
+      if (res.error) {
+        this.notify.error("Das initiale Laden schlug fehl.");
+      } else if (res.data) {
+        console.log(res.data);
+
+	const devices = Object.entries(res.data);
+
+	for (let device of devices) {
+	  const name = device[0];
+	  const config = device[1];
+
+	  if (config.type === "client" || config.type === "ext-client") {
+		  console.log("Found a client:", name, config);
+		  
+		this.desktops.push({
+	      ip: config.ip,
+	      name: name
+	    });
+	  }
+	}
+      }
+    });
+  }
+
   loadMonitor(index: number) {
     const monitor = this.monitors[index];
 
@@ -125,6 +151,34 @@ export class ControlService {
 
       return !res.error && res.data !== undefined;
     }));
+  }
+
+  createVideoWall() {
+	  const ELEMENTS_PER_ROW = 3;
+	  const monitors: string[][] = [];
+	  let row: string[] = [];
+
+	  this.monitors.forEach((m, i) => {
+	  	if (m.selected) {
+			row.push(m.name);
+		}
+
+		if ((i + 1) % ELEMENTS_PER_ROW === 0) {
+			monitors.push(row);
+			row = [];
+		}
+		
+	  });
+
+	  if (row.length > 0) {
+	    monitors.push(row);
+	  }
+
+	  console.log("Videowall", monitors);
+
+	  this.request.createVideoWall(monitors).subscribe(res => {
+	  	console.log(res);
+	  });
   }
 
   bindMonitor(monitor: Monitor, desktop: string): Observable<boolean> {

@@ -9,7 +9,7 @@ import { DeviceMonitor } from "../domain/monitor";
 })
 export class RequestService {
 
-  static readonly BASE = "http://localhost:9001/api/v1"; //https://192.168.35.38:9001/api/v1";
+  static readonly BASE = "https://192.168.35.38:9001/api/v1";
   static readonly R_CONFIG = "";
   static readonly DEVICES = "devices";
 
@@ -22,7 +22,7 @@ export class RequestService {
   }
 
   fetchDevices() {
-    return this.get<{[key: string]: any}>(`${ RequestService.R_CONFIG }/config?devices`);
+    return this.get<{[key: string]: any}>(`${ RequestService.R_CONFIG }config?devices`);
   }
 
   togglePower(device: string, mode: 1 | 0) {
@@ -30,7 +30,27 @@ export class RequestService {
   }
 
   toggleVideoWall(device: string, mode: 1 | 0) {
-    return this.post<string, 1 | 0>(`${ RequestService.DEVICES }/${ device }/videowall`, mode);
+    return this.post<string, 1 | 0>(`${ RequestService.DEVICES }/${ device }/videowall_toggle`, mode);
+  }
+
+  createVideoWall(monitors: string[][]) {
+	  let pattern = "";
+
+	  for (let r = 0; r < monitors.length; r++) {
+		  for (let c = 0; c < monitors[r].length; c++) {
+			pattern += monitors[r][c];
+			  
+			if (c < monitors[r].length - 1) {
+				pattern += ",";
+			}
+		  }
+		  
+		  if (r < monitors.length - 1) {
+		  	pattern += ";";
+		  }
+	  }
+
+	  return this.post< boolean, string >("videowall", pattern);
   }
 
   selectSource(device: string, id: string) {

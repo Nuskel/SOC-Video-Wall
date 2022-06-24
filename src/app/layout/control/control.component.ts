@@ -29,11 +29,13 @@ export class ControlComponent implements OnInit {
   changeDesktop(desktop: any) {
     this.desktop = desktop.value;
     this.changes = true;
+    // TODO
   }
 
   changeSource(source: any) {
     this.source = source.value;
     this.changes = true;
+    // TODO
   }
 
   selectMe() {
@@ -72,7 +74,9 @@ export class ControlComponent implements OnInit {
   }
 
   toggleVideoWallOn() {
-    this.control.monitors.filter(m => m.selected).forEach(m => this.control.toggleVideoWall(m, true).subscribe());
+   // this.control.monitors.filter(m => m.selected).forEach(m => this.control.toggleVideoWall(m, true).subscribe());
+  
+  	this.control.createVideoWall();
   }
 
   toggleVideoWallOff() {

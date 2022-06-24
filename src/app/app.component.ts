@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ControlService } from 'shared/service/control.service';
+import { Component, OnInit } from '@angular/core';
+import { ControlService } from './shared/service/control.service';
 
 @Component({
   selector: 'app-root',
