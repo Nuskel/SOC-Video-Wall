@@ -23,7 +23,7 @@ export class MonitorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.control.loadMonitor(this.monitorIndex).subscribe();
+    this.control.loadMonitor(this.monitor).subscribe();
   }
 
   togglePower() {

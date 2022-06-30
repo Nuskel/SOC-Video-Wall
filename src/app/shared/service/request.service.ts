@@ -9,7 +9,7 @@ import { DeviceMonitor } from "../domain/monitor";
 })
 export class RequestService {
 
-  static readonly BASE = "http://localhost:9001/api/v1"; // "https://192.168.35.38:9001/api/v1";
+  static readonly BASE = "https://192.168.35.38:9001/api/v1";
   static readonly R_CONFIG = "";
   static readonly DEVICES = "devices";
 

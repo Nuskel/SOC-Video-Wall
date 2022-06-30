@@ -132,9 +132,7 @@ export class ControlService {
     });
   }
 
-  loadMonitor(index: number) {
-    const monitor = this.monitors[index];
-
+  loadMonitor(monitor: Monitor) {
     monitor.power = "pending";
 
     return this.request.loadDevice(monitor.name).pipe(map(res => {
@@ -289,6 +287,8 @@ export class ControlService {
           this.notify.error("Konnte den Monitor nicht ausschalten.", monitor.name);
         }
       } else {
+	this.notify.info("Monitor wird gestartet... Bitte warten.", monitor.name);
+
         monitor.power = (<PowerState>res.data);
       }
 
