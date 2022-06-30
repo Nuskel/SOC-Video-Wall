@@ -287,7 +287,9 @@ export class ControlService {
           this.notify.error("Konnte den Monitor nicht ausschalten.", monitor.name);
         }
       } else {
-	this.notify.info("Monitor wird gestartet... Bitte warten.", monitor.name);
+	if (power) {
+	  this.notify.info("Monitor wird gestartet... Bitte warten.", monitor.name);
+	}
 
         monitor.power = (<PowerState>res.data);
       }
