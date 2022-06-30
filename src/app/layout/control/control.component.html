@@ -38,18 +38,21 @@
 
       <div class="control">
         <label> <i class="bi bi-pc-display-horizontal"></i> </label>
-        <select class="spec-select"
+        <select #desktopSelect
+                class="spec-select"
                 matTooltip="Desktop"
                 matTooltipPosition="above"
-                [value]="desktop"
+                [disabled]="!anySelected"
                 (change)="changeDesktop($event.target)">
+          <option value="__select__" selected> [ Auswählen ] </option>
           <option *ngFor="let d of control.desktops" [value]="d.name"> {{ d.name }} </option>
         </select>
 
         <button class="x-button"
                 matTooltip="Mich als Quell-PC setzen"
                 matTooltipPosition="above"
-                (click)="selectMe()"
+                [disabled]="!anySelected"
+                (click)="selectMe(desktopSelect)"
         > <i class="bi bi-person-circle"></i> </button>
       </div>
 
@@ -58,8 +61,9 @@
         <select class="spec-select"
                 matTooltip="Quelle"
                 matTooltipPosition="above"
-                [value]="source"
+                [disabled]="!anySelected"
                 (change)="changeSource($event.target)">
+          <option value="__select__" selected> [ Auswählen ] </option>
           <option *ngFor="let s of Sources" [value]="s.id"> {{ s.name }} </option>
         </select>
       </div>
@@ -76,10 +80,16 @@
       <!-- Directy executed: -->
 
       <div class="control control-right">
-        <button class="sub-control x-button rotate"
+        <button class="sub-control x-button x-space-right"
+                matTooltip="Ausgewählte als Videowand"
+                matTooltipPosition="above" (click)="toggleVideoWall()">
+          <i class="bi bi-columns-gap"></i>
+        </button>
+
+        <button class="sub-control x-button"
                 matTooltip="Videowand-Modus einschalten"
                 matTooltipPosition="above" (click)="toggleVideoWallOn()">
-          <i class="bi bi-grid-1x2"></i>
+          <i class="bi bi-ui-checks-grid"></i>
         </button>
         <button class="sub-control x-button"
                 matTooltip="Videowand-Modus ausschalten"

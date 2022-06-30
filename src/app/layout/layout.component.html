@@ -6,11 +6,12 @@
       <em class="bi bi-person-circle"></em>
       <span> Ich </span>
     </div>
-    <p> Desktop: {{ control.me.name }} </p>
-    <p> IP: {{ control.me.ip }} </p>
+    <p> Desktop: {{ control.me?.name }} </p>
+    <p> Input: {{ getInput() }} </p>
 
-    <select class="spec-select" (change)="setMe($event.target)" [value]="control.me.name">
-      <option *ngFor="let d of control.desktops" [value]="d.name"> {{ d.name }} </option>
+    <select class="spec-select" (change)="setMe($event.target)">
+      <option> [ Auswählen ] </option>
+      <option *ngFor="let d of control.desktops" [value]="d.name" [selected]="control.me?.name === d.name"> {{ d.name }} </option>
     </select>
   </div>
 

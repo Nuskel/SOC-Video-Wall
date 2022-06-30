@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ControlService} from "../shared/service/control.service";
 import {Router} from "@angular/router";
+import { Sources } from "../shared/domain/monitor";
 
 @Component({
   selector: 'app-layout',
@@ -9,12 +10,15 @@ import {Router} from "@angular/router";
 })
 export class LayoutComponent implements OnInit {
 
+  readonly Sources = Sources;
+
   constructor(
     private router: Router,
     public control: ControlService
   ) { }
 
   ngOnInit(): void {
+
   }
 
   setMe(target: any) {
@@ -24,6 +28,16 @@ export class LayoutComponent implements OnInit {
       this.control.me = desktop;
       this.router.navigateByUrl(`#${ desktop.name }`);
     }
+  }
+
+  getInput() {
+    if (this.control.me) {
+      if (this.control.me.input) {
+        return Sources.find(s => s.id === this.control.me?.input)?.name || this.control.me.input;
+      }
+    }
+
+    return "";
   }
 
 }

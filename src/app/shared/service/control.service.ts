@@ -11,7 +11,7 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class ControlService {
 
-  desktops: Desktop[] = [
+  _desktops: Desktop[] = [
     {
       ip: "192.168.35.131",
       name: "soc-pc01"
@@ -38,6 +38,7 @@ export class ControlService {
     }
   ];
 
+  desktops: Desktop[] = [];
   monitors: Monitor[] = [
     {
       ip: "192.168.35.161",
@@ -89,48 +90,45 @@ export class ControlService {
     }
   ];
 
-  me: Desktop = this.desktops[0];
+  me?: Desktop;
   selectionMode = false;
 
   constructor(
     private route: ActivatedRoute,
     private request: RequestService,
     private notify: NotificationService
-  ) {
-    this.route.fragment.subscribe(f => {
-      if (f) {
-        const desktop = this.desktops.find(x => x.name === f);
-
-        if (desktop) {
-          this.me = desktop;
-        }
-      }
-    });
-  }
+  ) {}
 
   initLoad() {
     this.request.fetchDevices().subscribe(res => {
       if (res.error) {
         this.notify.error("Das initiale Laden schlug fehl.");
       } else if (res.data) {
-        console.log(res.data);
+        const devices = Object.entries(res.data);
 
-	const devices = Object.entries(res.data);
+        for (let device of devices) {
+          const name = device[0];
+          const config = device[1];
 
-	for (let device of devices) {
-	  const name = device[0];
-	  const config = device[1];
-
-	  if (config.type === "client" || config.type === "ext-client") {
-		  console.log("Found a client:", name, config);
-		  
-		this.desktops.push({
-	      ip: config.ip,
-	      name: name
-	    });
-	  }
-	}
+          if (config.type === "client" || config.type === "ext-client") {
+            this.desktops.push({
+              ip: config.ip,
+              input: config.source || "Switch",
+              name: name
+            });
+          }
+        }
       }
+
+      this.route.fragment.subscribe(f => {
+        if (f) {
+          const desktop = this.desktops.find(x => x.name === f);
+
+          if (desktop) {
+            this.me = desktop;
+          }
+        }
+      });
     });
   }
 
@@ -155,29 +153,62 @@ export class ControlService {
 
   createVideoWall() {
 	  const ELEMENTS_PER_ROW = 3;
-	  const monitors: string[][] = [];
+    const refs: [Monitor, PowerState][] = [];
+	  let monitors: string[][] = [];
 	  let row: string[] = [];
 
 	  this.monitors.forEach((m, i) => {
 	  	if (m.selected) {
-			row.push(m.name);
-		}
+	  	  refs.push([m, m.power]);
+        row.push(m.name);
+      }
 
-		if ((i + 1) % ELEMENTS_PER_ROW === 0) {
-			monitors.push(row);
-			row = [];
-		}
-		
+      if ((i + 1) % ELEMENTS_PER_ROW === 0) {
+        monitors.push(row);
+        row = [];
+      }
 	  });
 
 	  if (row.length > 0) {
 	    monitors.push(row);
-	  }
+	  } else {
+	    // Alle leeren Zeilen am Anfang & Ende entfernen
 
-	  console.log("Videowall", monitors);
+      let i = monitors.length - 1;
+      let j = 0;
+
+      for (; j < monitors.length; j++) {
+        if (monitors[j].length > 0) {
+          break;
+        }
+      }
+
+      for (; i >= 0; i--) {
+        if (monitors[i].length > 0) {
+          break;
+        }
+      }
+
+      if (i < j) {
+        return;
+      }
+
+      monitors = monitors.slice(j, i + 1);
+    }
+
+	  refs.forEach(m => m[0].power = "pending");
 
 	  this.request.createVideoWall(monitors).subscribe(res => {
-	  	console.log(res);
+	    if (res.error || !res.data) {
+	      this.notify.error("Konnte die Videowand nicht erstellen.");
+      } else {
+	      this.notify.success("Videowand wurde erfolgreich erstellt.");
+      }
+
+      refs.forEach(m => {
+        m[0].power = m[1];
+        m[0].videowall = true;
+      });
 	  });
   }
 

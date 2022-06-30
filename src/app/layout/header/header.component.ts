@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
   }
 
   get isSettings() {
-    return this.router.url.endsWith("settings");
+    return this.router.url.includes("settings");
   }
 
 }

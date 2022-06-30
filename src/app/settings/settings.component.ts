@@ -11,15 +11,7 @@ import {RequestService} from "../shared/service/request.service";
 export class SettingsComponent implements OnInit {
 
   loading = false;
-  config: {
-    devices: {
-      [key: string]: {
-        type: string,
-        name: string,
-        ip: string
-      }
-    }
-  } | null = null;
+  devices: any;
 
   constructor(
     public control: ControlService,
@@ -31,23 +23,15 @@ export class SettingsComponent implements OnInit {
   }
 
   isMe(desktop: Desktop): boolean {
-    return desktop.ip === this.control.me.ip;
+    return desktop.name === this.control.me?.name;
   }
 
   fetchConfig() {
     this.loading = true;
     this.request.fetchConfig().subscribe(cfg => {
-      (<any>this.config) = cfg.data;
+      this.devices = Object.entries((<any>cfg.data));
       this.loading = false;
     });
-  }
-
-  get devices() {
-    if (this.config) {
-      return Object.entries(this.config.devices).filter(x => x[1].type !== "config");
-    }
-
-    return [];
   }
 
 }

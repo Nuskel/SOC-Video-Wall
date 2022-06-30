@@ -9,7 +9,7 @@ import { DeviceMonitor } from "../domain/monitor";
 })
 export class RequestService {
 
-  static readonly BASE = "https://192.168.35.38:9001/api/v1";
+  static readonly BASE = "http://localhost:9001/api/v1"; // "https://192.168.35.38:9001/api/v1";
   static readonly R_CONFIG = "";
   static readonly DEVICES = "devices";
 
@@ -39,12 +39,12 @@ export class RequestService {
 	  for (let r = 0; r < monitors.length; r++) {
 		  for (let c = 0; c < monitors[r].length; c++) {
 			pattern += monitors[r][c];
-			  
+
 			if (c < monitors[r].length - 1) {
 				pattern += ",";
 			}
 		  }
-		  
+
 		  if (r < monitors.length - 1) {
 		  	pattern += ";";
 		  }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Sources } from "../../shared/domain/monitor";
 import { ControlService } from "../../shared/service/control.service";
+import {forkJoin} from "rxjs";
+import {Route, Router} from "@angular/router";
 
 @Component({
   selector: 'app-control',
@@ -17,31 +19,43 @@ export class ControlComponent implements OnInit {
   source?: any = Sources[0];
 
   constructor(
-    public control: ControlService
-  ) {
-    this.desktop = control.desktops[0];
-  }
+    public control: ControlService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    return;
+    this.applyMeToFragment();
+  }
+
+  applyMeToFragment() {
+    if (this.control.me) {
+      this.router.navigateByUrl(`#${ this.control.me.name }`);
+    }
   }
 
   changeDesktop(desktop: any) {
-    this.desktop = desktop.value;
-    this.changes = true;
-    // TODO
+    const value = desktop.value;
+
+    forkJoin([...this.control.monitors.filter(m => m.selected).map(m => this.control.bindMonitor(m, value))])
+      .subscribe(() => desktop.value = "__select__");
   }
 
   changeSource(source: any) {
-    this.source = source.value;
-    this.changes = true;
-    // TODO
+    const value = source.value;
+
+    forkJoin([...this.control.monitors.filter(m => m.selected).map(m => this.control.selectSource(m, value))])
+      .subscribe(() => source.value = "__select__");
   }
 
-  selectMe() {
-    this.control.monitors.filter(m => m.selected).forEach(m => {
-      this.control.bindMonitor(m, this.control.me.name).subscribe();
-    });
+  selectMe(desktop: any) {
+    const me = this.control.me;
+
+    if (me) {
+      desktop.value = me.name;
+
+      forkJoin([...this.control.monitors.filter(m => m.selected).map(m => this.control.bindMonitor(m, me.name))])
+        .subscribe(() => desktop.value = "__select__");
+    }
   }
 
   applyChanges() {
@@ -73,10 +87,12 @@ export class ControlComponent implements OnInit {
     this.control.monitors.filter(m => m.selected).forEach(m => this.control.togglePower(m, 0).subscribe());
   }
 
+  toggleVideoWall() {
+    this.control.createVideoWall();
+  }
+
   toggleVideoWallOn() {
-   // this.control.monitors.filter(m => m.selected).forEach(m => this.control.toggleVideoWall(m, true).subscribe());
-  
-  	this.control.createVideoWall();
+    this.control.monitors.filter(m => m.selected).forEach(m => this.control.toggleVideoWall(m, true).subscribe());
   }
 
   toggleVideoWallOff() {
@@ -85,6 +101,10 @@ export class ControlComponent implements OnInit {
 
   get selectionMode() {
     return this.control.selectionMode;
+  }
+
+  get anySelected() {
+    return this.control.monitors.find(m => m.selected);
   }
 
 }

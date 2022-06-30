@@ -53,9 +53,11 @@ export class MonitorComponent implements OnInit {
   }
 
   selectMe(x: any) {
-    x.value = this.control.me.name;
+    if (this.control.me) {
+      x.value = this.control.me.name;
 
-    this.bindMonitor(this.control.me.name, x);
+      this.bindMonitor(this.control.me.name, x);
+    }
   }
 
   bindMonitor(desktop: string, x: any) {

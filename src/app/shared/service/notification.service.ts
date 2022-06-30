@@ -17,7 +17,11 @@ export class NotificationService {
   }
 
   info(msg: string, title: string = "Information") {
-    this.notify({ id: this.notifications.length, title, text: msg, class: "notification-text" });
+    this.notify({ id: this.notifications.length, title, text: msg, class: "notification-info" });
+  }
+
+  success(msg: string, title: string = "Erfolg") {
+    this.notify({ id: this.notifications.length, title, text: msg, class: "notification-success" });
   }
 
   error(msg: string, title: string = "Fehler") {

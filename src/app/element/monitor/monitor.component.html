@@ -10,7 +10,7 @@
         {{ monitor.desktop }} •
 
         <!-- Video-Wall mode -->
-        <span *ngIf="monitor.videowall" class="videowall bi bi-grid-1x2"></span>
+        <span *ngIf="monitor.videowall" class="bi-ui-checks-grid"></span>
         <span *ngIf="!monitor.videowall" class="bi bi-grid"></span>
       </p>
     </div>
@@ -28,7 +28,7 @@
       <span *ngIf="power === 0" class="bi bi-display" title="Der Monitor ist aus"></span>
       <span *ngIf="power === 'pending'" class="bi bi-cast" title="Der Monitor verarbeitet einen Befehl"></span>
 
-      <span *ngIf="monitor.desktop === control.me.name" class="monitor-me bi bi-person" title="Ich bin der Quell-Desktop"></span>
+      <span *ngIf="monitor.desktop === control.me?.name" class="monitor-me bi bi-person" title="Ich bin der Quell-Desktop"></span>
 
       <button class="monitor-power-toggle spec-button" [title]="powerToggleTitle" (click)="togglePower()"> <i class="bi bi-power"></i> </button> <!-- <i> tag muss bleiben! -->
     </div>
@@ -49,7 +49,7 @@
     </div>
 
     <div class="monitor-spec">
-      <label> <span class="videowall bi bi-grid-1x2"></span> </label>
+      <label> <span class="bi bi-columns-gap"></span> </label>
       <mat-slide-toggle [disabled]="controlDisabled" [checked]="videowall" (change)="toggleVideoWall(videowallSlider)" #videowallSlider></mat-slide-toggle>
       <span style="margin-left: 5px"> Videowand </span>
     </div>

@@ -3,14 +3,14 @@
     <caption> Desktop-Einstellungen </caption>
     <thead>
       <th scope="col"> Index </th>
-      <th scope="col"> IP </th>
+      <th scope="col"> Input </th>
       <th scope="col"> Name </th>
       <th scope="col"> </th>
     </thead>
     <tbody>
       <tr *ngFor="let desktop of control.desktops; index as i">
         <td> {{ i + 1 }} </td>
-        <td> {{ desktop.ip }} </td>
+        <td> {{ desktop.input }} </td>
         <td> {{ desktop.name }} </td>
         <td> {{ isMe(desktop) ? '(Ich)' : '' }} </td>
       </tr>
@@ -19,20 +19,24 @@
 
   <span class="spacer"></span>
 
-  <table *ngIf="config" class="settings-table">
+  <table *ngIf="devices" class="settings-table">
     <caption> Devices </caption>
     <thead>
     <th scope="col"> Index </th>
+    <th scope="col"> Type </th>
     <th scope="col"> ID </th>
     <th scope="col"> IP </th>
     <th scope="col"> Name </th>
+    <th scope="col"> Source </th>
     </thead>
     <tbody>
     <tr *ngFor="let d of devices; index as i">
       <td> {{ i + 1 }} </td>
+      <td> {{ d[1].type }} </td>
       <td> {{ d[0] }} </td>
       <td> {{ d[1].ip }} </td>
       <td> {{ d[1].name }} </td>
+      <td> {{ d[1].source }} </td>
     </tr>
     </tbody>
   </table>
